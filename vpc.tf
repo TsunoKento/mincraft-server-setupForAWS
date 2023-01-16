@@ -15,3 +15,10 @@ resource "aws_subnet" "mincraft_public_1a_sn" {
     Name = "mincraft-public-1a-sn"
   }
 }
+
+resource "aws_internet_gateway" "handson_igw" {
+  vpc_id = aws_vpc.mincraft_vpc.id
+  tags = {
+    Name = "mincraft-igw"
+  }
+}
