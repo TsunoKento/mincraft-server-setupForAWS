@@ -3,5 +3,8 @@ version: "3"
 services:
   terraform:
     image: hashicorp/terraform:1.3.7
+    volumes:
+      - ./terraform:/terraform
+    working_dir: /terraform
     env_file:
       - .env
