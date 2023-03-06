@@ -42,3 +42,36 @@ resource "aws_route_table_association" "route_association_public_subnet" {
   subnet_id      = aws_subnet.mincraft_public_subnet.id
   route_table_id = aws_route_table.mincraft_route_table.id
 }
+
+# myIPの取得用サイト
+data "http" "ifconfig" {
+  url = "https://ipv4.icanhazip.com/"
+}
+
+resource "aws_security_group" "mincraft_sg" {
+  name   = "mincraft_sg"
+  vpc_id = aws_vpc.mincraft_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 25565
+    to_port     = 25565
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(data.http.ifconfig.response_body)}/32"]
+  }
+
+  tags = {
+    "Name" = "mincraft_sg"
+  }
+}
