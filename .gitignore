@@ -1,5 +1,7 @@
 .env
 
+.key_pair
+
 .DS_Store
 
 terraform/.terraform
